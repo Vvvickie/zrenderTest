@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #main {
+            width: 500px;
+            height: 200px;
+            margin: 0 auto;
+        }
+        #bottom {
+            width: 500px;
+            height: 200px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+<!--<div id="main"></div>-->
+<div id="bottom"></div>
+</body>
+<script src="node_modules/zrender/dist/zrender.js"></script>
+<script>
+    window.onload = function () {
+        // var container = document.getElementById('main');
+        // var zr = zrender.init(container);
+        // var w = zr.getWidth();
+        // var h = zr.getHeight();
+        // var r = 30;
+        // var circle = new zrender.Circle({
+        //     shape: {cx: w/2, cy: h / 2, r: r},
+        //     style: {
+        //         fill: 'transparent',
+        //         stroke: '#FF6EBE'
+        //     },
+        //     silent: true
+        // });
+        // circle.animate('shape', true).when(3750, {cx: w - r}).when(11250, {cx: r}).when(15000,{cx:w/2}).start();
+        // zr.add(circle);
+        var box = document.getElementById('bottom');
+        var zr2 = zrender.init(box);
+        var w2 = zr2.getWidth();
+        var h2 = zr2.getHeight();
+        var heart = new zrender.Heart({
+            shape:{ cx: w2 /2 , cy: h2/2, width:40,height:50},
+            style:{
+                fill:'#F8A3A3',
+                stroke:'transparent'
+            }
+        })
+        heart.animate('shape',true).when(1000,{width:60,height:75})
+            .when(2000,{width:40,height:50}).start();
+        heart.animate('style',true).when(1000,{fill:'#F52B2B'}).when(2000,{fill:'#F8A3A3'}).start();
+        zr2.add(heart);
+        var text = new zrender.Text({
+            shape:{ cx: w2 /2 , cy: h2/2+60, width:40,height:50},
+            style:{
+                text:'我们滚成一团~',
+                textWidth:350,
+                textHeight:200,
+                // textOffset:200,
+                // fontSize:'50px',
+                textStroke:'#F8A3A3',
+                textFill:'#F8A3A3',
+                fontFamily:"cursive",
+                textPosition:'center'
+            }
+        })
+        zr2.add(text);
+        zr2.on('mouseover', function() {zr2.remove(heart);});
+        zr2.on('mouseout',function () {
+            zr2.add(heart)
+        })
+        // console.log(zr2.Eventful());
+    };
+</script>
+</html>
