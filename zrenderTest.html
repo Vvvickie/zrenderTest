@@ -4,21 +4,18 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <style>
-        #main {
-            width: 500px;
-            height: 200px;
-            margin: 0 auto;
-        }
         #bottom {
-            width: 500px;
-            height: 200px;
+            width: 800px;
+            height: 600px;
             margin: 0 auto;
         }
+
     </style>
 </head>
 <body>
 <!--<div id="main"></div>-->
 <div id="bottom"></div>
+<div class="example-container"></div>
 </body>
 <script src="node_modules/zrender/dist/zrender.js"></script>
 <script>
@@ -41,38 +38,113 @@
         var box = document.getElementById('bottom');
         var zr2 = zrender.init(box);
         var w2 = zr2.getWidth();
-        var h2 = zr2.getHeight();
+        var h2 = zr2.getHeight() - 200;
         var heart = new zrender.Heart({
-            shape:{ cx: w2 /2 , cy: h2/2, width:40,height:50},
-            style:{
-                fill:'#F8A3A3',
-                stroke:'transparent'
-            }
+            shape: {cx: w2 / 2 - 30, cy: 200, width: 40, height: 50},
+            style: {
+                fill: '#F8A3A3',
+                stroke: 'transparent',
+            },
+            draggable: true
         })
-        heart.animate('shape',true).when(1000,{width:60,height:75})
-            .when(2000,{width:40,height:50}).start();
-        heart.animate('style',true).when(1000,{fill:'#F52B2B'}).when(2000,{fill:'#F8A3A3'}).start();
-        zr2.add(heart);
+        heart.animate('shape', true).when(1000, {width: 60, height: 75})
+            .when(2000, {width: 40, height: 50}).start();
+        heart.animate('style', true).when(1000, {fill: '#F52B2B'}).when(2000, {fill: '#F8A3A3'}).start();
+        //zr2.add(heart);
+
+        // var heart2 = new zrender.Heart({
+        //     shape: {cx: w2 / 2+30, cy: 200, width: 40, height: 50},
+        //     style: {
+        //         fill: '#F8A3A3',
+        //         stroke: 'transparent',
+        //     },
+        //     draggable: true
+        // })
+        // heart2.animate('shape', true).when(1000, {width: 60, height: 75})
+        //     .when(2000, {width: 40, height: 50}).start();
+        // heart2.animate('style', true).when(1000, {fill: '#F52B2B'}).when(2000, {fill: '#F8A3A3'}).start();
+        // zr2.add(heart2);
+
         var text = new zrender.Text({
-            shape:{ cx: w2 /2 , cy: h2/2+60, width:40,height:50},
-            style:{
-                text:'我们滚成一团~',
-                textWidth:350,
-                textHeight:200,
-                // textOffset:200,
-                // fontSize:'50px',
-                textStroke:'#F8A3A3',
-                textFill:'#F8A3A3',
-                fontFamily:"cursive",
-                textPosition:'center'
-            }
+            shape: {cx: w2 / 2, cy: h2 / 2 + 60},
+            style: {
+                text: '我们滚成一团QvQ',
+                textStroke: '#F8A3A3',
+                textFill: '#F8A3A3',
+                fontFamily: "cursive",
+                fontSize: 50,
+                textPosition: 'center',
+                blend: 'lighten'
+            },
+            position: [w2 / 2 - 200, h2 / 2]
         })
+        text.on('click', function () {
+            text.animate('position', false).when(200, [w2 / 2 - 220, h2 / 2 - 50]).when(500, [w2 / 2 - 180, h2 / 2 + 30]).when(600, [w2 / 2 - 200, h2 / 2]).start();
+            text.animate('style', false).when(200, {fontSize:54}).when(500, {fontSize:44}).when(600, {fontSize:50}).start();       });
         zr2.add(text);
-        zr2.on('mouseover', function() {zr2.remove(heart);});
-        zr2.on('mouseout',function () {
-            zr2.add(heart)
-        })
+
+        // zr2.on('mouseover', function() {zr2.remove(heart);});
+        // zr2.on('mouseout',function () {
+        //     zr2.add(heart)
+        // })
         // console.log(zr2.Eventful());
+
+        var hearts = [];
+        for (var i = 0; i < 20; i++) {
+            var width = Math.random() * (8 - 4) + 4;
+            var heart = new zrender.Heart({
+                shape: {cx: Math.random() * 600, cy: Math.random() * 400, width: width, height: width * 1.2},
+                style: {
+                    fill: '#F8A3A3',
+                    stroke: 'transparent',
+                },
+            })
+            hearts.push(heart);
+            zr2.add(heart);
+        }
+
+        function move() {
+            for (var i = 0; i < 20; i++)
+                hearts[i].animateTo({
+                    position: [Math.random() * 800, Math.random() * 600]
+                }, 10000)
+            text.animate('position', false).when(200, [w2 / 2 - 220, h2 / 2 - 50]).when(500, [w2 / 2 - 180, h2 / 2 + 30]).when(600, [w2 / 2 - 200, h2 / 2]).start();
+            text.animate('style', false).when(200, {fontSize:54}).when(500, {fontSize:44}).when(600, {fontSize:50}).start();
+
+        };
+
+        move();
+
+        setInterval(function () {
+            for (var i = 0; i < 16; i++)
+                hearts[i].animateTo({
+                    position: [Math.random() * 800, Math.random() * 600]
+                }, 10000)
+            text.animate('position', false).when(200, [w2 / 2 - 220, h2 / 2 - 50]).when(500, [w2 / 2 - 180, h2 / 2 + 30]).when(600, [w2 / 2 - 200, h2 / 2]).start();
+            text.animate('style', false).when(200, {fontSize:54}).when(500, {fontSize:44}).when(600, {fontSize:50}).start();      }, 10000);
+
+        // var container = document.getElementsByClassName('example-container')[0];
+        // var zr = zrender.init(container);
+        // var w = zr.getWidth();
+        // var h = zr.getHeight();
+        // var circle = new zrender.Circle({
+        //     shape: {cx: w / 2, cy: h / 2, r: 50},
+        //     style: {fill: '#FF6EBE', stroke: 'red'},
+        //     draggable: true
+        // });
+        // var heart = new zrender.Heart({
+        //     shape: {cx: w / 2 + 20, cy: h / 2 - 40, width: 60, height: 80},
+        //     style: {stroke: 'red'},
+        //     draggable: true
+        // });
+        // circle.setClipPath(heart);
+        // zr.add(circle);
+        // var borderA = new zrender.Circle({
+        //     shape: {cx: w / 2, cy: h / 2, r: 50},
+        //     style: {fill: 'transparent', stroke: '#5ACFFF'}
+        // });
+        // zr.add(borderA);
+
     };
 </script>
 </html>
